@@ -9,6 +9,12 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = "/home/kaushik/Downloads/"
 app.config['ALLOWED_EXTENSIONS'] = ["png", 'jpg', 'jpeg']
 
+app.config['CELERY_BROKER_URL'] = 'redis://localhost:6379/0'
+app.config['CELERY_RESULT_BACKEND'] = 'redis://localhost:6379/0'
+
+celery = Celery(app.name, broker=app.config['CELERY_BROKER_URL'])
+celery.conf.update(app.config)
+
 
 @app.route('/validate_user')
 def validate_user_form():
@@ -24,10 +30,10 @@ def validate_user():
     user_name = request.form['user_name']
     if file and allowed_file(file.filename):
         checks = face_checker.Face_Checker()
-        file_path = os.path.join(app.config['UPLOAD_FOLDER'], user_name)
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], user_name, user_name + "jpg")
         if os.path.exists(file_path):
-         return str(checks.decode_compare_face(file_to_validate=file, user_path= file_path))
-        else :
+            return str(checks.decode_compare_face(file_to_validate=file, user_path=file_path))
+        else:
             return "User does not exist !"
 
 
@@ -47,12 +53,16 @@ def upload_file():
     file = request.files['file']
     uploader_name = request.form['user_name']
     if file and allowed_file(file.filename):
-        file_path = os.path.join(app.config['UPLOAD_FOLDER'], uploader_name)
-        os.makedirs(file_path, exist_ok=True)
-        file.save(os.path.join(file_path,"1.jpg"))
-        return 'File uploaded sucessfully !'
+
+        if face_checker.Face_Checker.verify_faces(file):
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], uploader_name)
+            os.makedirs(file_path, exist_ok=True)
+            file.save(os.path.join(file_path, uploader_name + ".jpg"))
+            return 'File uploaded successfully !'
+        else:
+            return "Invalid File !"
     else:
-        return "Invalid File !"
+        return "Invalid File ! Please upload image with only one person."
 
 
 def allowed_file(file_name):
