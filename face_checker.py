@@ -28,6 +28,9 @@ class Face_Checker:
         result = face_recognition.compare_faces([client_image_encoding], test_image_encoding)
         return result[0]
 
+    def verify_faces_in_zipFile(self, img_zipFile):
+        #TODO extact files from zip and confirmthat all are pics of same person.
+        return True
     # check if image has only one face .. reject  image otherwise
     def verify_faces(self, img_file):
         uploaded_image_array = face_recognition.load_image_file(img_file)

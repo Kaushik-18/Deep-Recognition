@@ -1,7 +1,7 @@
 import face_recognition
 
-client_image = face_recognition.load_image_file("/home/kaushik/Pictures/b.jpg")
-test_image = face_recognition.load_image_file("/home/kaushik/Pictures/g1.jpg")
+client_image = face_recognition.load_image_file("/home/sunil/Pictures/b.jpg")
+test_image = face_recognition.load_image_file("/home/sunil/Pictures/g1.jpg")
 client_face_loc = face_recognition.face_locations(client_image)
 test_face_loc = face_recognition.face_locations(test_image)
 
