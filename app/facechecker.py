@@ -2,12 +2,9 @@
 # we could take up to 3 images
 
 import face_recognition
-import zipfile
-import Deep_Recognition
-import os
 
 
-class Face_Checker:
+class FaceChecker:
     # TODO this is only a testing method ; need to add better and more methods
 
     def decode_compare_face(self, file_to_validate, user_path):
@@ -28,29 +25,22 @@ class Face_Checker:
         result = face_recognition.compare_faces([client_image_encoding], test_image_encoding)
         return result[0]
 
-    def verify_faces_in_zipFile(self, img_zipFile):
-        #TODO extact files from zip and confirmthat all are pics of same person.
-        return True
-    # check if image has only one face .. reject  image otherwise
-    def verify_faces(self, img_file):
-        uploaded_image_array = face_recognition.load_image_file(img_file)
-        if (len(face_recognition.face_locations(uploaded_image_array)) != 1):
-            return False
-        else:
-            return True
-
     # generate and save face encoding for given image .
-    # Note : function assumes image has already been checked
-
-    def create_face_encodings(self, img_file):
+    @staticmethod
+    def create_face_encodings(img_file):
         image_array = face_recognition.load_image_file(img_file)
-        image_encoding = face_recognition.face_encodings(image_array)[0]
-        return image_encoding
+        client_face_loc = face_recognition.face_locations(image_array)
+        if (len(client_face_loc) == 1):
+            image_encoding = face_recognition.face_encodings(image_array)[0]
+            return image_encoding
+        else:
+            return []
 
-    # TODO save file to database ..maybe MongoDB ?
-    def save_face_encoding(self, encoding_array, user_name):
-        pass
-
-    def compare_faces(self, test_image_encodings, user_encodings):
+    @staticmethod
+    def compare_faces(test_image_encodings, user_encodings):
         result = face_recognition.compare_faces([user_encodings], test_image_encodings)
         return result[0]
+
+    def verify_faces_in_zipFile(self, img_zipFile):
+        # TODO extact files from zip and confirmthat all are pics of same person.
+        return True

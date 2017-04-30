@@ -3,7 +3,7 @@ import os, zipfile, cv2
 import numpy as np
 from PIL import Image
 from uniqueID import UniqueID
-import fnmatch, face_checker
+import fnmatch, facechecker
 from database import Database 
 import pickle, json
 from openCVObject import OpenCVObject
@@ -55,7 +55,7 @@ def uploader_file():
     file = request.files['file']
     nbr = UniqueID.getUniqueID()
     
-    checks = face_checker.Face_Checker()
+    checks = facechecker.FaceChecker()
 
     if file and allowed_Training_file(file.filename):
 
@@ -104,7 +104,7 @@ def uploaderMultipleData_file():
                 imageData.append({"image": pickle.dumps(image[y: y + h, x: x + w]), "ID": nbr})
                 
     # return the images list and labels list
-    print imageData
+    print (imageData)
     Database.storeImagesWithID(imageData)
     return "Done"
     
