@@ -37,7 +37,7 @@ class OpenCVObject:
     def uploadPhotos(file, nbr):
         imageData = []
         file_path = os.path.join(OpenCVObject.UPLOAD_FOLDER, str(nbr))
-        os.makedirs(file_path , 0755)
+        os.makedirs(file_path)
 
         with zipfile.ZipFile(file) as zf:
             zf.extractall(os.path.join(file_path))     
