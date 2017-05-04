@@ -5,7 +5,7 @@ from pymongo import MongoClient
 
 app = Flask(__name__)
 app.config.from_object(config["default"])
-celery = Celery(__name__)
+celery = Celery(__name__ , broker= Config.CELERY_BROKER_URL)
 celery.conf.update(app.config)
 mongo_client = MongoClient(app.config['MONGO_DB_URL'])
 db = mongo_client.FaceDB

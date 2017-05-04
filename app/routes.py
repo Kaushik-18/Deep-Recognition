@@ -1,7 +1,6 @@
 from flask import render_template, request, jsonify
 from app import app
-from app import facechecker
-from app import images_worker
+from app import utils
 
 
 @app.route('/validate_user')
@@ -16,10 +15,10 @@ def validate_user():
 
     file = request.files['file']
     user_name = request.form['user_name']
-    if file and allowed_file(file.filename):
-        pass
+    if file and utils.allowed_file(file.filename, app.config['ALLOWED_EXTENSIONS']):
+        utils.start_validation_process(user_name,file)
     else:
-        return
+        return "Invalid file uploaded "
 
 
 @app.route('/register_user')
@@ -35,13 +34,7 @@ def uploader_file():
 
     file = request.files['file']
     uploader_name = request.form['user_name']
-    if file and allowed_file(file.filename, app.config['ALLOWED_TRAIN_FILE_EXTENSIONS']):
-        images_worker.upload_encoder_task(uploader_name,file)
-
+    if file and utils.allowed_file(file.filename, app.config['ALLOWED_TRAIN_FILE_EXTENSIONS']):
+        return utils.start_registration_process(uploader_name, file)
     else:
-        return "Invalid File ! Please upload image with only one person."
-
-
-def allowed_file(file_name, extensions):
-    return "." in file_name and \
-           file_name.rsplit(".", 1)[1] in extensions
+        return "Invalid file uploaded."
