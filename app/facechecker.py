@@ -2,6 +2,7 @@
 # we could take up to 3 images
 
 import face_recognition
+from app import user_table
 
 
 class FaceChecker:
@@ -30,7 +31,7 @@ class FaceChecker:
     def create_face_encodings(img_file):
         image_array = face_recognition.load_image_file(img_file)
         client_face_loc = face_recognition.face_locations(image_array)
-        if (len(client_face_loc) == 1):
+        if len(client_face_loc) == 1:
             image_encoding = face_recognition.face_encodings(image_array)[0]
             return image_encoding
         else:
