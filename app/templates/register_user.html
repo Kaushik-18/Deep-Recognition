@@ -56,15 +56,36 @@
                     <h1>Register User </h1>
                     <form action="/uploader" method="POST"
                           enctype="multipart/form-data">
-                        Register User <br>
-                        name: <input type="text" name="user_name"><br>
-                        age: <input type="text" name="age"><br>
-                        city: <input type="text" name="city"><br>
-                        state: <input type="text" name="state"><br>
-                        zip: <input type="text" name="zip"><br>
-                        phone: <input type="text" name="phone"><br>
-                        <input type="file" name="file"/><br>
-                        <input type="submit"/><br>
+                        <table style="width: 100%">
+                        <tr>
+                        <th>Name: </th><th><input type="text" name="user_name"><br></th>
+                        </tr>
+                        <tr>
+                        <th>Age: </th><th><input type="text" name="age"><br></th>
+                        </tr>
+                        <tr>
+                        <th>City: </th><th><input type="text" name="city"><br></th>
+                        </tr>
+                        <tr>
+                        <th>State:</th> <th><input type="text" name="state"><br></th>
+                        </tr>
+                        <tr>
+                        <th>Zip:</th><th> <input type="text" name="zip"><br></th>
+                        </tr>
+                        <tr>
+                        <th>Phone: </th><th><input type="text" name="phone"><br></th>
+                        </tr>
+                        </table>
+                        <br>
+                        <table>
+                        <tr>
+                        <th><input type="file" name="file"/><br></th>
+                        </tr>
+                        <tr>
+                        <th>
+                        <input type="submit"/><br></th>
+                        </tr>
+                        </table>
 
                     </form>
                     <!--<a href="#menu-toggle" class="btn btn-default" id="menu-toggle">Toggle Menu</a>-->
