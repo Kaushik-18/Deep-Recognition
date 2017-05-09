@@ -25,7 +25,7 @@ def upload_encoder_task(uploader_name, upload_file):
 def validation_task(uploader_name, validation_image_file):
     validation_encoding = facechecker.FaceChecker.create_face_encodings(validation_image_file)
     if len(validation_encoding) == 0:
-        return 'invalid image for test !'
+        return 'invalid image for validation !'
     user_entry = user_table.find_one({"user_name": uploader_name})
     if user_entry is not None:
         encodings = user_entry['image_data']
@@ -37,4 +37,7 @@ def validation_task(uploader_name, validation_image_file):
         prediction = svm_classifier.predict(validation_encoding)
         distance = svm_classifier.decision_function(validation_encoding)
         print(distance, prediction[0])
-        return prediction
+        if prediction[0] == 1:
+            return "Image match !"
+        else:
+            return "Image mismatch !"

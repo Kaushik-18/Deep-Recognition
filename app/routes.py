@@ -16,9 +16,9 @@ def validate_user():
     file = request.files['file']
     user_name = request.form['user_name']
     if file and utils.allowed_file(file.filename, app.config['ALLOWED_EXTENSIONS']):
-        utils.start_validation_process(user_name,file)
+        return jsonify(status='success', message=utils.start_validation_process(user_name, file))
     else:
-        return "Invalid file uploaded "
+        return jsonify(status="fail", message="Invalid file uploaded !")
 
 
 @app.route('/register_user')
@@ -30,11 +30,11 @@ def user_registration():
 @app.route('/uploader', methods=['POST'])
 def uploader_file():
     if 'file' not in request.files:
-        return 'No File Selected !'
+        return jsonify(status='fail', message="No File Selected!")
 
     file = request.files['file']
     uploader_name = request.form['user_name']
     if file and utils.allowed_file(file.filename, app.config['ALLOWED_TRAIN_FILE_EXTENSIONS']):
         return utils.start_registration_process(uploader_name, file)
     else:
-        return "Invalid file uploaded."
+        return jsonify(status='fail', message="Invalid file uploaded.")
