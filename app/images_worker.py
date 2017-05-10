@@ -4,6 +4,7 @@ import pickle
 from bson.binary import Binary
 from sklearn import svm, ensemble
 import os
+from collections import Counter
 
 
 @celery.task
@@ -31,13 +32,23 @@ def validation_task(uploader_name, validation_image_file):
         encodings = user_entry['image_data']
         encoding_array = pickle.loads(encodings)
 
-        # using one shot svm
-        svm_classifier = ensemble.IsolationForest()
-        svm_classifier.fit(X=encoding_array)
-        prediction = svm_classifier.predict(validation_encoding)
-        distance = svm_classifier.decision_function(validation_encoding)
-        print(distance, prediction[0])
-        if prediction[0] == 1:
+        checks_array = [facechecker.FaceChecker.compare_faces(validation_encoding, encoding) for encoding in
+                        encoding_array]
+
+        checkval = Counter(checks_array).most_common(1)[0][0]
+        if checkval:
             return 'success', "Image match !"
         else:
-            return 'fail', "Image mismatch !"
+            return 'fail', "Image does not match records !"
+
+            #
+            # # using one shot svm
+            # svm_classifier = svm.OneClassSVM(nu=0.1, kernel="rbf", gamma=0.1)
+            # svm_classifier.fit(X=encoding_array)
+            # prediction = svm_classifier.predict(validation_encoding)
+            # distance = svm_classifier.decision_function(validation_encoding)
+            # print(distance, prediction[0])
+            # if prediction[0] == 1:
+            #     return 'success', "Image match !"
+            # else:
+            #     return 'fail', "Image does not match records !"
