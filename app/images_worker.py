@@ -7,6 +7,10 @@ import os
 from collections import Counter
 
 
+class InvalidImageException(Exception):
+    pass
+
+
 @celery.task
 def upload_encoder_task(uploader_name, upload_file):
     tmp_zip = zipfile.ZipFile(upload_file)
@@ -14,6 +18,9 @@ def upload_encoder_task(uploader_name, upload_file):
     for filename in tmp_zip.namelist():
         temp_file = tmp_zip.open(filename)
         enc_array = facechecker.FaceChecker.create_face_encodings(img_file=temp_file)
+        if enc_array is None :
+            raise InvalidImageException(" Unable to process image " + filename)
+
         complete_array.append(enc_array.tolist())
 
     cp = Binary(pickle.dumps(complete_array, protocol=2))

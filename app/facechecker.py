@@ -35,7 +35,7 @@ class FaceChecker:
             image_encoding = face_recognition.face_encodings(image_array)[0]
             return image_encoding
         else:
-            return []
+            return None
 
     @staticmethod
     def compare_faces(test_image_encodings, user_encodings):
