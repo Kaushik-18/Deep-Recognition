@@ -9,13 +9,15 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Simple Sidebar - Start Bootstrap Template</title>
+    <title>Deep-Recognition</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="../static/styles/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom CSS -->
     <link href="../static/styles/css/simple-sidebar.css" rel="stylesheet">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/nanobar/0.2.1/nanobar.min.js"></script>
+
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -54,7 +56,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <h1>Register User </h1>
-                    <form action="/uploader" method="POST"
+                    <form action="/uploader" method="POST" name="register_form"
                           enctype="multipart/form-data">
                         <table style="width: 100%">
                         <tr>
@@ -83,7 +85,7 @@
                         </tr>
                         <tr>
                         <th>
-                        <input type="submit"/><br></th>
+                        <input type="submit" name="submit"/><br></th>
                         </tr>
                         </table>
 
@@ -104,13 +106,7 @@
 <!-- Bootstrap Core JavaScript -->
 <script src="../static/styles/js/bootstrap.min.js"></script>
 
-<!-- Menu Toggle Script -->
-<!--<script>
-    $("#menu-toggle").click(function (e) {
-        e.preventDefault();
-        $("#wrapper").toggleClass("toggled");
-    });
-</script>-->
+
 
 </body>
 

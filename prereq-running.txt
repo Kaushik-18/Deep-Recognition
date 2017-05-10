@@ -1,3 +1,6 @@
 sudo docker run -it -p 6379:6379 redis:3.2.8-alpine
 sudo docker run -it -p 27017:27017 mongo:3.4.4
 celery  worker -A  celery_worker.celery  --loglevel=info
+
+//For task monitoring
+celery flower -A proj --address=127.0.0.1 --port=5555

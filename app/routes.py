@@ -16,7 +16,8 @@ def validate_user():
     file = request.files['file']
     user_name = request.form['user_name']
     if file and utils.allowed_file(file.filename, app.config['ALLOWED_EXTENSIONS']):
-        return jsonify(status='success', message=utils.start_validation_process(user_name, file))
+        status, message = utils.start_validation_process(user_name, file)
+        return jsonify(status=status, message=message)
     else:
         return jsonify(status="fail", message="Invalid file uploaded !")
 

@@ -21,13 +21,14 @@ def start_registration_process(user_name, uploaded_file):
         paths = os.path.join('uploads', create_random_file() + ".zip")
         uploaded_file.save(paths)
         images_worker.upload_encoder_task.delay(user_name, paths)
+        return jsonify(status='success', message="images uploaded ! process started")
     else:
-        return jsonify(status="failed", mesaage ="user already registered !")
+        return jsonify(status="failed", mesaage="user already registered !")
 
 
 def start_validation_process(user_name, validation_file):
     if not is_user_record_present(user_name):
-        return jsonify(status="fail",error='user name not present in records')
+        return "fail", 'user name not present in records'
     else:
         return images_worker.validation_task(user_name, validation_file)
 
