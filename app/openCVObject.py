@@ -8,7 +8,7 @@ import pickle, json
 
 class OpenCVObject:
     
-    cascadePath = "haarcascade_frontalface_default.xml"
+    cascadePath = "static/haarcascade_frontalface_default.xml"
     faceCascade = cv2.CascadeClassifier(cascadePath)
     UPLOAD_FOLDER = "/tmp/home/Database/"
 
@@ -30,6 +30,8 @@ class OpenCVObject:
         faces = OpenCVObject.faceCascade.detectMultiScale(predict_image)
         for (x, y, w, h) in faces:
             nbr_predicted, conf = OpenCVObject.recognizer.predict(predict_image[y: y + h, x: x + w])
+            print nbr_predicted
+            print conf
             return nbr_predicted, conf
 
 
@@ -37,14 +39,14 @@ class OpenCVObject:
     def uploadPhotos(file, nbr):
         imageData = []
         file_path = os.path.join(OpenCVObject.UPLOAD_FOLDER, str(nbr))
-        os.makedirs(file_path)
+        os.makedirs(file_path , 0755)
 
         with zipfile.ZipFile(file) as zf:
             zf.extractall(os.path.join(file_path))     
 
         image_paths = []
         for root, dirnames, filenames in os.walk(file_path):
-            for filename in fnmatch.filter(filenames, '*.jpg'):
+            for filename in fnmatch.filter(filenames, '*.pgm'):
                 image_paths.append(os.path.join(root, filename))
 
         for image_path in image_paths:            
@@ -55,13 +57,14 @@ class OpenCVObject:
             
             # Detect the face in the image
             faces = OpenCVObject.faceCascade.detectMultiScale(image)
-            
+            print faces
             # If face is detected, append the face to images and the label to labels
             for (x, y, w, h) in faces:
 
                 imageData.append({"image": pickle.dumps(image[y: y + h, x: x + w]), "ID": nbr})    
 
         #print imageData
+        print imageData
         Database.storeImagesWithID(imageData)
 
     @staticmethod

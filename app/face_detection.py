@@ -3,7 +3,7 @@ import os, zipfile, cv2
 import numpy as np
 from PIL import Image
 from uniqueID import UniqueID
-import fnmatch, facechecker
+import fnmatch
 from database import Database 
 import pickle, json
 from openCVObject import OpenCVObject
@@ -18,7 +18,11 @@ app.config['ALLOWED_TRAIN_FILE_EXTENSIONS'] = ["zip"]
 
 @app.route('/validate_user')
 def validate_user_form():
-    return render_template('validate_user.html')
+    return render_template('validate_user2.html')
+
+@app.route('/train_model2')
+def train_model2():
+    return render_template('train_model.html')
 
 
 @app.route('/validator', methods=['POST'])
@@ -41,7 +45,7 @@ def train_model():
 
 @app.route('/register_user')
 def user_registration():
-    return render_template('register_user.html')
+    return render_template('register_user2.html')
     
 # TODO send JSON responses ; process files to check for face present
 # TODO strategy for uploading multiple image files during registration
@@ -55,14 +59,10 @@ def uploader_file():
     file = request.files['file']
     nbr = UniqueID.getUniqueID()
     
-    checks = facechecker.FaceChecker()
+    
 
-    if file and allowed_Training_file(file.filename):
-
-        if checks.verify_faces_in_zipFile(file):
-            OpenCVObject.uploadPhotos(file, nbr)
-        else:
-            return "Invalid File !"
+    if file and allowed_Training_file(file.filename):        
+        OpenCVObject.uploadPhotos(file, nbr)        
     else:
         return "Invalid File ! Please upload image with only one person."
 
@@ -104,7 +104,7 @@ def uploaderMultipleData_file():
                 imageData.append({"image": pickle.dumps(image[y: y + h, x: x + w]), "ID": nbr})
                 
     # return the images list and labels list
-    print (imageData)
+    print imageData
     Database.storeImagesWithID(imageData)
     return "Done"
     
@@ -119,7 +119,7 @@ def allowed_file(file_name):
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0', port=5001)
 
 
 

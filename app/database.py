@@ -19,11 +19,13 @@ class Database:
 
     @staticmethod
     def getUniqueID():
-        d = Database.db.General_Entry.find({"Key":"UniqueKey"}, {"_id":0})
-        id = dumps(list(d))
-        p = json.loads(id)
-        print p
-        return p[0]["id"]
+        try:
+            d = Database.db.General_Entry.find({"Key":"UniqueKey"}, {"_id":0})
+            id = dumps(list(d))
+            p = json.loads(id)
+            return p[0]["id"]
+        except:
+            return 0
         
 
     @staticmethod
@@ -41,7 +43,8 @@ class Database:
         for p in pp:
             images.append(pickle.loads(p["image"]))
             labels.append(p["ID"])
-
+        print images
+        print labels
         return (images,labels)
 
     @staticmethod
